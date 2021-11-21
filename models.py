@@ -1,8 +1,6 @@
 import json
 from typing import List
 
-from values import Errors
-
 
 class TreeNode:
     def __init__(self, val, left=None, right=None):
@@ -68,7 +66,7 @@ class LinkedList:
                 current = current.next
             return f'[{",".join(res)}]'
         else:
-            raise Errors.InfinityError
+            raise Exception('InfinityError')
 
     @staticmethod
     def decompile(arr):

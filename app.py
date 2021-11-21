@@ -2,7 +2,6 @@ from flask import Flask, request
 
 from compiler import compile_result, AppTypes
 from models import TreeNode, LinkedList
-from values import Errors
 
 app = Flask(__name__)
 
@@ -13,14 +12,7 @@ def route_compile():
         data = request.get_json(force=True)
         return compile_result(data['code'], data['type'], data['params'])
     except Exception as e:
-        if e == Errors.TypeMissmatchError:
-            return Errors.TypeMissmatchError, 409
-        elif e == Errors.TypeIsntSupported:
-            return Errors.TypeIsntSupported, 409
-        elif e == Errors.InfinityError:
-            return Errors.InfinityError, 409
-        else:
-            return 'Server Error', 500
+        return 'Server Error', 500
 
 
 @app.route('/check-decompile', methods=['POST'])

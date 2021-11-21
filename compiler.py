@@ -1,47 +1,49 @@
 import json
 
 from models import TreeNode, LinkedList, ArrayType
-from values import Errors
 
 AppTypes = {
     'str': 'str',
     'int': 'int',
     'tree': 'TreeNode',
-    'array': 'List',
+    'array': 'list',
     'linkedList': 'LinkedList'
 }
 
 
-def solution(params):
-    return []
+class Solution:
+    def solution(self):
+        pass
 
 
 def decompiled_params(params):
     res = []
     for p in params:
-        if p.type == AppTypes['tree']:
-            return TreeNode.decompile(p.value)
-        elif p.type == AppTypes['linkedList']:
-            return LinkedList.decompile(p.value)
-        elif p.type == AppTypes['int']:
-            return int(p.value)
-        elif p.type == AppTypes['str']:
-            return p.value
-        elif p.type == AppTypes['array']:
-            return json.loads(p.value)
+        if AppTypes[p['type']] == AppTypes['tree']:
+            res.append(TreeNode.decompile(p.value))
+        elif AppTypes[p['type']] == AppTypes['linkedList']:
+            res.append(LinkedList.decompile(p.value))
+        elif AppTypes[p['type']] == AppTypes['int']:
+            res.append(int(p['value']))
+        elif AppTypes[p['type']] == AppTypes['str']:
+            res.append(p.value)
+        elif AppTypes[p['type']] == AppTypes['array']:
+            res.append(json.loads(p['value']))
         else:
-            raise Errors.TypeIsntSupported
+            raise Exception('TypeIsntSupported')
     return res
 
 
 def compile_result(code, data_type, params):
-    eval(code)
+    exec(code)
     compiled = {
         'value': None
     }
-    res = solution(*decompiled_params(params))
+    d_params = decompiled_params(params)
+    s = Solution()
+    res = s.solution(*d_params)
     if AppTypes[data_type] != res.__class__.__name__:
-        raise Errors.TypeMissmatchError
+        raise ValueError('asd')
     if res.__class__.__name__ == AppTypes['tree']:
         compiled['value'] = TreeNode.compile(res)
     elif res.__class__.__name__ == AppTypes['array']:
