@@ -2,6 +2,7 @@ from flask import Flask, request
 
 from compiler import compile_result, AppTypes
 from models import TreeNode, LinkedList
+from values import InfinityError, TypeIsntSupported, TypeMissmatchError
 
 app = Flask(__name__)
 
@@ -11,7 +12,13 @@ def route_compile():
     try:
         data = request.get_json(force=True)
         return compile_result(data['code'], data['type'], data['params'])
-    except Exception as e:
+    except TypeMissmatchError:
+        return 'TypeMissmatchError', 409
+    except InfinityError:
+        return 'InfinityError', 409
+    except TypeIsntSupported:
+        return 'TypeIsntSupported', 409
+    except Exception:
         return 'Server Error', 500
 
 

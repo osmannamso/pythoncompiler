@@ -1,6 +1,7 @@
 import json
 
 from models import TreeNode, LinkedList, ArrayType
+from values import TypeMissmatchError, TypeIsntSupported
 
 AppTypes = {
     'str': 'str',
@@ -30,7 +31,7 @@ def decompiled_params(params):
         elif AppTypes[p['type']] == AppTypes['array']:
             res.append(json.loads(p['value']))
         else:
-            raise Exception('TypeIsntSupported')
+            raise TypeIsntSupported
     return res
 
 
@@ -43,7 +44,7 @@ def compile_result(code, data_type, params):
     s = Solution()
     res = s.solution(*d_params)
     if AppTypes[data_type] != res.__class__.__name__:
-        raise ValueError('asd')
+        raise TypeMissmatchError()
     if res.__class__.__name__ == AppTypes['tree']:
         compiled['value'] = TreeNode.compile(res)
     elif res.__class__.__name__ == AppTypes['array']:
